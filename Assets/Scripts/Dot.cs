@@ -90,6 +90,10 @@ public class Dot : MonoBehaviour
                 row = prevRow;
                 col = prevCol;
             }
+            else
+            {
+                board.destroyMatches();
+            }
             otherDot = null;
         }
 
