@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
+    public enum gameState
+    {
+        wait,
+        move
+    }
+
+    public gameState currentState = gameState.move;
     public int width;
     public int height;
     public int offset;
@@ -11,6 +18,10 @@ public class Board : MonoBehaviour
     private BackgroundTile[,] allTiles;
     public GameObject[] dots;
     public GameObject[,] allDots;
+
+    
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -189,5 +200,8 @@ public class Board : MonoBehaviour
             yield return new WaitForSeconds(.5f);
             destroyMatches();
         }
+
+        yield return new WaitForSeconds(.5f);
+        currentState = gameState.move;
     }
 }
