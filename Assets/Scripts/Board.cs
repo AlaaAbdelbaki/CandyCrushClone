@@ -20,6 +20,7 @@ public class Board : MonoBehaviour
     public GameObject[] dots;
     public GameObject[,] allDots;
     private FindMatches findMatches;
+    public GameObject destroyEffect;
 
 
 
@@ -110,6 +111,8 @@ public class Board : MonoBehaviour
         if (allDots[col, row].GetComponent<Dot>().isMatched)
         {
             findMatches.currentMatches.Remove(allDots[col, row]);
+            GameObject particule = Instantiate(destroyEffect,allDots[col,row].transform.position,Quaternion.identity);
+            Destroy(particule, .5f);
             Destroy(allDots[col, row]);
             allDots[col, row] = null;
         }
