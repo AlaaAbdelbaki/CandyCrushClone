@@ -6,6 +6,7 @@ public class Board : MonoBehaviour
 {
     public int width;
     public int height;
+    public int offset;
     public GameObject tilePrefab;
     private BackgroundTile[,] allTiles;
     public GameObject[] dots;
@@ -33,7 +34,7 @@ public class Board : MonoBehaviour
         {
             for (int j = 0; j < height; j++)
             {
-                Vector2 tempPos = new Vector2(i, j);
+                Vector2 tempPos = new Vector2(i, j+offset);
                 GameObject backgroundTile = Instantiate(tilePrefab, tempPos,Quaternion.identity) as GameObject;
                 backgroundTile.transform.parent = this.transform;
                 backgroundTile.name = "( " + i + ',' + j + " )";
@@ -49,6 +50,8 @@ public class Board : MonoBehaviour
                 maxIterations = 0;
 
                 GameObject Dot = Instantiate(dots[dotToUse], tempPos, Quaternion.identity);
+                Dot.GetComponent<Dot>().row = j;
+                Dot.GetComponent<Dot>().col = i;
                 Dot.transform.parent = this.transform;
                 Dot.name = "Dot: ( " + i + ',' + j + " )";
                 allDots[i, j] = Dot;
@@ -135,5 +138,56 @@ public class Board : MonoBehaviour
         }
 
         yield return new WaitForSeconds(.4f);
+        StartCoroutine(fillBoardCo());
+    }
+
+    private void refillBoard()
+    {
+        for(int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (allDots[i, j] == null)
+                {
+                    Vector2 tempPos = new Vector2(i, j+offset);
+                    int dotToUse = Random.Range(0,dots.Length);
+                    GameObject dot = Instantiate(dots[dotToUse], tempPos, Quaternion.identity);
+                    allDots[i, j] = dot;
+                    dot.GetComponent<Dot>().row = j;
+                    dot.GetComponent<Dot>().col = i;
+                }
+            }
+        }
+    }
+
+    private bool matchesOnBoard()
+    {
+        for(int i = 0; i < width; i++)
+        {
+            for(int j = 0; j < height; j++)
+            {
+                if (allDots[i, j] != null)
+                {
+                    if (allDots[i, j].GetComponent<Dot>().isMatched)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private IEnumerator fillBoardCo()
+    {
+        refillBoard();
+
+        yield return new WaitForSeconds(.5f);
+
+        while (matchesOnBoard())
+        {
+            yield return new WaitForSeconds(.5f);
+            destroyMatches();
+        }
     }
 }
