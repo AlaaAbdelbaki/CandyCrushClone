@@ -10,6 +10,7 @@ public class Board : MonoBehaviour
         move
     }
 
+     
     public gameState currentState = gameState.move;
     public int width;
     public int height;
@@ -18,14 +19,15 @@ public class Board : MonoBehaviour
     private BackgroundTile[,] allTiles;
     public GameObject[] dots;
     public GameObject[,] allDots;
+    private FindMatches findMatches;
 
-    
 
 
 
     // Start is called before the first frame update
     void Start()
     {
+        findMatches = FindObjectOfType<FindMatches>();
         allTiles = new BackgroundTile[width,height];
         allDots = new GameObject[width, height];
         Setup();  
@@ -107,6 +109,7 @@ public class Board : MonoBehaviour
     {
         if (allDots[col, row].GetComponent<Dot>().isMatched)
         {
+            findMatches.currentMatches.Remove(allDots[col, row]);
             Destroy(allDots[col, row]);
             allDots[col, row] = null;
         }

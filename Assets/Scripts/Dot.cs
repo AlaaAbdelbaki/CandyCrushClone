@@ -13,8 +13,8 @@ public class Dot : MonoBehaviour
     public int prevCol;
     public int prevRow;
 
-    
 
+    private FindMatches find;
     private Board board;
 
     private GameObject otherDot;
@@ -30,6 +30,7 @@ public class Dot : MonoBehaviour
     void Start()
     {
         board = FindObjectOfType<Board>();
+        find = FindObjectOfType<FindMatches>();
         //targetX = (int)transform.position.x;
         //targetY = (int)transform.position.y;
         //row = targetY;
@@ -42,7 +43,7 @@ public class Dot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        findMatches();
+        //findMatches();
         if (isMatched)
         {
             SpriteRenderer mySprite = GetComponent<SpriteRenderer>();
@@ -59,6 +60,8 @@ public class Dot : MonoBehaviour
             {
                 board.allDots[col, row] = this.gameObject;
             }
+            find.findAllMatches();
+
         }
         else
         {
@@ -76,6 +79,7 @@ public class Dot : MonoBehaviour
             {
                 board.allDots[col, row] = this.gameObject;
             }
+            find.findAllMatches();
         }
         else
         {
